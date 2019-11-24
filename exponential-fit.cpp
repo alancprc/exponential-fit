@@ -125,7 +125,7 @@ double ExpFit::CalcApproxC()
   for (int i = 0; i != n - 1; ++i) {
     dy[i] = y[i + 1] - y[i];
     cx[i] = (x[i + 1] + x[i]) / 2;
-    dq[i] = dy[i] / cx[i];
+    dq[i] = dy[i] / dx[i];
   }
 
   vector<double> b_c(n - 2);  // b calculated
