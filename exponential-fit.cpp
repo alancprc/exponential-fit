@@ -147,7 +147,11 @@ double ExpFit::CalcApproxC()
   for (int i = 0; i != n; ++i) {
     c_c[i] = y[i] - a_approx * expf(b_approx * x[i]);
   }
-  double c_approx = std::accumulate(c_c.begin(), c_c.end(), 0.0) / c_c.size();
+  // in case that c_c veries greatly, e.g. [1e-10, 1e-20],
+  // the median value is better than mean value.
+  auto nth = c_c.begin() + c_c.size() / 2;
+  std::nth_element(c_c.begin(), nth, c_c.end());
+  double c_approx = *nth;
   cout << "c_approx: " << c_approx << endl;
   return c_approx;
 }
@@ -183,10 +187,10 @@ double ExpFit::CalcFitError(double c_approx)
 {
   CalcFitAB(c_approx);
   // calc the error of ln(y-c) - (lna + bx)
-  
+
   vector<double> fit_error(n);
   double error = 0;
-  for(size_t i = 0; i != fit_error.size(); ++i) {
+  for (size_t i = 0; i != fit_error.size(); ++i) {
     error += std::pow(log(y[i] - c_approx) - lna_calc - b_calc * x[i], 2);
     // error += std::abs(log(y[i] - c_approx) - lna_calc - b_calc * x[i]);
   }
@@ -242,7 +246,7 @@ void ExpFit::PrintFit()
   // original
   cout << "original:";
   for (size_t i = 0; i < min(max_print, y.size()); ++i)
-      cout << "\n\t" << y.at(i);
+    cout << "\n\t" << y.at(i);
   // clang-format off
   cout << "\nparameters:"
        << "\n\ta: " << a
@@ -254,7 +258,7 @@ void ExpFit::PrintFit()
   // fitted
   cout << "\nfitted:";
   for (size_t i = 0; i < min(max_print, y_fit.size()); ++i)
-      cout << "\n\t" << y_fit.at(i);
+    cout << "\n\t" << y_fit.at(i);
   // clang-format off
   cout << "\nThe exponential fit is:"
        << "\n\ta: " << expf(lna_calc)
@@ -268,5 +272,5 @@ void ExpFit::PrintFit()
 int main()
 {
   ExpFit expfit;
-  expfit.SetTest(3, 0.5, -1.0, 0);
+  expfit.SetTest(40, 0.5, -1.0, 0);
 }
