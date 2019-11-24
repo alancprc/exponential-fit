@@ -1,11 +1,14 @@
 #include <vector>
+#include <tuple>
 
 class ExpFit
 {
  public:
+  using ResultType = std::tuple<double, double, double>;
   void SetTest(int n, double a, double b, double c);
   /// calc the initial approximate of c
   void CalcFit();
+  ResultType GetResult();
 
  private:
   void GenTestData();
