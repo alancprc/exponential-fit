@@ -167,11 +167,6 @@ double ExpFit::CalcFitError(double c_approx)
   double avgGrowthFactor = expf(ee_sum / (x.back() - x.front()));
   cout << "\navgGrowthFactor: \n\t" << avgGrowthFactor << endl;
 
-  double avgGrowthFactor1 =
-      std::accumulate(growthFactor.begin(), growthFactor.end(), 0.0) /
-      growthFactor.size();
-  cout << "\navgGrowthFactor1: \n\t" << avgGrowthFactor1 << endl;
-
   double deviation = 0;
   for (size_t i = 0; i != growthFactor.size(); ++i) {
     deviation += std::abs(avgGrowthFactor - growthFactor[i]);
