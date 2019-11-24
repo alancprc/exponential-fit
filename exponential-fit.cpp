@@ -1,48 +1,12 @@
+#include "exponential-fit.h"
 #include <algorithm>
 #include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <numeric>
-#include <vector>
+
 using namespace std;
 
-class ExpFit
-{
- public:
-  void SetTest(int n, double a, double b, double c);
-  /// calc the initial approximate of c
-  void CalcFit();
-
- private:
-  void GenTestData();
-  void PrintTestData();
-
-  double CalcApproxC();
-  void CalcFitAB(double c_approx);
-  double CalcFitError(double c_approx);
-  double CalcFitErrorC(double c_approx);
-
-  bool AbortCalc(double c_approx);
-  void PrintFit();
-
-  int n;
-  double a;
-  double b;
-  double c;
-  double a_tmp;
-  double b_tmp;
-  double lna_calc;
-  double b_calc;
-  double c_calc;
-  double a_approx;
-  vector<double> y;
-  vector<double> x;
-  vector<double> dx;
-  vector<double> dy;
-  vector<double> cx;
-  vector<double> dq;
-  vector<double> y_fit;
-};
 void ExpFit::SetTest(int n, double a, double b, double c)
 {
   this->n = n;
