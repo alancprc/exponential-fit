@@ -112,6 +112,7 @@ void ExpFit::CalcFit()
     }
   }
   c_calc = c_approx;
+  CalcFitAB(c_calc);
   PrintFit();
 }
 
