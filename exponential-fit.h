@@ -14,7 +14,6 @@ class ExpFit
   double CalcApproxC();
   void CalcFitAB(double c_approx);
   double CalcFitError(double c_approx);
-  double CalcFitErrorC(double c_approx);
 
   bool AbortCalc(double c_approx);
   void PrintFit();

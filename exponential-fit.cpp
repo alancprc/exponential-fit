@@ -149,22 +149,7 @@ void ExpFit::CalcFitAB(double c_approx)
         copysignf(expf(lna_calc), a_approx) * expf(b_calc * x[i]) + c_approx;
 }
 
-/// calc error according to [a_/b_/c_]approx
 double ExpFit::CalcFitError(double c_approx)
-{
-  CalcFitAB(c_approx);
-  // calc the error of ln(y-c) - (lna + bx)
-
-  vector<double> fit_error(n);
-  double error = 0;
-  for (size_t i = 0; i != fit_error.size(); ++i) {
-    error += std::pow(log(abs(y[i] - c_approx)) - lna_calc - b_calc * x[i], 2);
-    // error += std::abs(log(y[i] - c_approx) - lna_calc - b_calc * x[i]);
-  }
-  return error;
-}
-
-double ExpFit::CalcFitErrorC(double c_approx)
 {
   vector<double> ee(n - 1);
   for (int i = 0; i != n - 1; ++i) {
