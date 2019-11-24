@@ -215,9 +215,3 @@ void ExpFit::PrintFit()
        << "x + " << c_calc << endl;
   // clang-format on
 }
-
-int main()
-{
-  ExpFit expfit;
-  expfit.SetTest(40, -0.5, -1.0, 0);
-}
