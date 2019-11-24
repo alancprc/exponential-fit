@@ -34,6 +34,7 @@ class ExpFit
   double lna_calc;
   double b_calc;
   double c_calc;
+  double a_approx;
   vector<double> y;
   vector<double> x;
   vector<double> dx;
@@ -84,8 +85,9 @@ void ExpFit::PrintTestData()
 void ExpFit::CalcFit()
 {
   double c_approx = CalcApproxC();
-  double deltaC = a > 0 ? *(std::min_element(y.begin(), y.end())) - c_approx
-                        : *(std::min_element(y.begin(), y.end())) - c_approx;
+  double deltaC = a_approx > 0
+                      ? *(std::min_element(y.begin(), y.end())) - c_approx
+                      : *(std::max_element(y.begin(), y.end())) - c_approx;
   double min_error = CalcFitError(c_approx);
 
   while (std::abs(deltaC) > 10e-8) {
@@ -140,7 +142,7 @@ double ExpFit::CalcApproxC()
   for (int i = 0; i != n - 1; ++i) {
     a_c[i] = dy[i] / (expf(b_approx * x[i + 1]) - expf(b_approx * x[i]));
   }
-  double a_approx = std::accumulate(a_c.begin(), a_c.end(), 0.0) / a_c.size();
+  a_approx = std::accumulate(a_c.begin(), a_c.end(), 0.0) / a_c.size();
   cout << "a_approx: " << a_approx << endl;
 
   vector<double> c_c(n);  // c calculated
@@ -160,7 +162,7 @@ void ExpFit::CalcFitAB(double c_approx)
 {
   // Calculate the values of ln(yi)
   vector<double> lny(n);
-  for (int i = 0; i < n; i++) lny[i] = log(y[i] - c_approx);
+  for (int i = 0; i < n; i++) lny[i] = log(abs(y[i] - c_approx));
 
   // variables for sums/sigma of xi,yi,xi^2,xiyi etc
   double xsum = 0, x2sum = 0, ysum = 0, xysum = 0;
@@ -179,7 +181,8 @@ void ExpFit::CalcFitAB(double c_approx)
   // to calculate y(fitted) at given x points
   y_fit.resize(n);
   for (int i = 0; i < n; i++)
-    y_fit[i] = expf(lna_calc) * expf(b_calc * x[i]) + c_approx;
+    y_fit[i] =
+        copysignf(expf(lna_calc), a_approx) * expf(b_calc * x[i]) + c_approx;
 }
 
 /// calc error according to [a_/b_/c_]approx
@@ -191,7 +194,7 @@ double ExpFit::CalcFitError(double c_approx)
   vector<double> fit_error(n);
   double error = 0;
   for (size_t i = 0; i != fit_error.size(); ++i) {
-    error += std::pow(log(y[i] - c_approx) - lna_calc - b_calc * x[i], 2);
+    error += std::pow(log(abs(y[i] - c_approx)) - lna_calc - b_calc * x[i], 2);
     // error += std::abs(log(y[i] - c_approx) - lna_calc - b_calc * x[i]);
   }
   return error;
@@ -261,10 +264,10 @@ void ExpFit::PrintFit()
     cout << "\n\t" << y_fit.at(i);
   // clang-format off
   cout << "\nThe exponential fit is:"
-       << "\n\ta: " << expf(lna_calc)
+       << "\n\ta: " << copysignf(expf(lna_calc), a_approx)
        << "\n\tb: " << b_calc
        << "\n\tc: " << c_calc
-       << "\n\ty = " << expf(lna_calc) << " * e^" << b_calc
+       << "\n\ty = " << copysignf(expf(lna_calc), a_approx) << " * e^" << b_calc
        << "x + " << c_calc << endl;
   // clang-format on
 }
@@ -272,5 +275,5 @@ void ExpFit::PrintFit()
 int main()
 {
   ExpFit expfit;
-  expfit.SetTest(40, 0.5, -1.0, 0);
+  expfit.SetTest(40, -0.5, -1.0, 0);
 }
