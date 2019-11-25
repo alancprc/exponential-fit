@@ -54,3 +54,14 @@ TEST(ExpFitTest, NegativeMorePointsTest)
   EXPECT_NEAR(expfit.GetB(), -1, 0.034);
   EXPECT_NEAR(expfit.GetC(), 0, 1e-6);
 }
+
+TEST(ExpFitTest, InputTest)
+{
+  ExpFit expfit;
+  expfit.SetY({1, exp(1), exp(2)});
+  expfit.SetX();
+  expfit.CalcFit();
+  EXPECT_NEAR(expfit.GetA(), 1, 1e-6);
+  EXPECT_NEAR(expfit.GetB(), 1, 1e-6);
+  EXPECT_NEAR(expfit.GetC(), 0, 1e-6);
+}

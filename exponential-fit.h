@@ -6,6 +6,9 @@ class ExpFit
  public:
   using ResultType = std::tuple<double, double, double>;
   void SetTest(int n, double a, double b, double c);
+  void SetY(std::vector<double> y);
+  void SetX(std::vector<double> x);
+  void SetX();
   /// calc the initial approximate of c
   void CalcFit();
   ResultType GetResult();
