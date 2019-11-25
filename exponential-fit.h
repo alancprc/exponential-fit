@@ -9,6 +9,9 @@ class ExpFit
   /// calc the initial approximate of c
   void CalcFit();
   ResultType GetResult();
+  double GetA();
+  double GetB();
+  double GetC();
 
  private:
   void GenTestData();

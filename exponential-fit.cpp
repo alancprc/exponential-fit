@@ -87,6 +87,12 @@ ExpFit::ResultType ExpFit::GetResult()
   return make_tuple(copysign(expf(lna_calc), a_approx), b_calc, c_calc);
 }
 
+double ExpFit::GetA() { return copysignf(expf(lna_calc), a_approx); }
+
+double ExpFit::GetB() { return b_calc; }
+
+double ExpFit::GetC() { return c_calc; }
+
 double ExpFit::CalcApproxC()
 {
   dx.resize(n - 1, 1);
