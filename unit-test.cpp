@@ -65,3 +65,14 @@ TEST(ExpFitTest, InputTest)
   EXPECT_NEAR(expfit.GetB(), 1, 1e-6);
   EXPECT_NEAR(expfit.GetC(), 0, 1e-6);
 }
+
+TEST(ExpFitTest, NoiseTest)
+{
+  ExpFit expfit;
+  expfit.SetY({1, expf(-1) + 0.004, expf(-2) - 0.003, expf(-3)});
+  expfit.SetX();
+  expfit.CalcFit();
+  EXPECT_NEAR(expfit.GetA(), 1, 0.08);
+  EXPECT_NEAR(expfit.GetB(), -1, 0.03);
+  EXPECT_NEAR(expfit.GetC(), 0, 0.004);
+}
