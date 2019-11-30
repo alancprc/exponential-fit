@@ -50,7 +50,6 @@ void ExpFit::SetY(vector<double> y)
 {
   this->y = y;
   n = y.size();
-  for (const auto& e : this->y) cout << e << "\t";
 }
 
 void ExpFit::SetX(vector<double> x) { this->x = x; }
@@ -67,29 +66,24 @@ void ExpFit::SetX()
 
 void ExpFit::CalcFit()
 {
-  double c_approx = CalcApproxC();
+  c_approx = CalcApproxC();
   double deltaC = a_approx > 0
                       ? *(std::min_element(y.begin(), y.end())) - c_approx
                       : *(std::max_element(y.begin(), y.end())) - c_approx;
   double min_error = CalcFitError(c_approx);
+  int step = 0;
+  PrintFitError(c_approx, deltaC, min_error, min_error, step);
 
-  while (std::abs(deltaC) > 10e-8) {
+  for (; std::abs(deltaC) > 10e-8; ++step) {
     double c_tmp = c_approx + deltaC;
     if (AbortCalc(c_tmp)) {
       deltaC /= 2;
       continue;
     }
-    double error = CalcFitError(c_approx + deltaC);
-
-    cout << "\n========== c_tmp = " << c_tmp
-         << "\n        c_approx = " << c_approx
-         << "\n          deltaC = " << deltaC
-         << "\n       min_error = " << min_error
-         << "\n           error = " << error << endl;
-
-    PrintFit();
+    double error = CalcFitError(c_tmp);
 
     if (error < min_error) {
+      PrintFitError(c_tmp, deltaC, error, min_error, step);
       min_error = error;
       c_approx += deltaC;
     } else {
@@ -98,7 +92,9 @@ void ExpFit::CalcFit()
   }
   c_calc = c_approx;
   CalcFitAB(c_calc);
-  PrintFit();
+  PrintInputData();
+  PrintFitData();
+  PrintFitParameter();
 }
 
 ExpFit::ResultType ExpFit::GetResult()
@@ -187,21 +183,17 @@ double ExpFit::CalcFitError(double c_approx)
   }
 
   vector<double> growthFactor(n - 1);
-  cout << "growthFactor:\n\t";
   for (size_t i = 0; i != growthFactor.size(); ++i) {
     growthFactor[i] = expf(ee[i] / dx[i]);
-    cout << growthFactor[i] << " ";
   }
 
   double ee_sum = std::accumulate(ee.begin(), ee.end(), 0.0);
   double avgGrowthFactor = expf(ee_sum / (x.back() - x.front()));
-  cout << "\navgGrowthFactor: \n\t" << avgGrowthFactor << endl;
 
   double deviation = 0;
   for (size_t i = 0; i != growthFactor.size(); ++i) {
     deviation += std::abs(avgGrowthFactor - growthFactor[i]);
   }
-  cout << "\ndeviation: " << deviation << endl;
   return deviation;
 }
 
@@ -211,37 +203,49 @@ bool ExpFit::AbortCalc(double c_approx)
   auto static max = max_element(y.begin(), y.end());
   bool abort = (c_approx >= *min) and (c_approx <= *max);
   if (abort) {
-    cout << "========== abort,  c_approx : " << c_approx << "\t min: " << *min
-         << "\t max: " << *max << endl;
+    cout << "\n========== c : " << c_approx << "\t min: " << *min
+         << "\t max: " << *max << "\t abort ==========" << endl;
   }
   return abort;
 }
 
-void ExpFit::PrintFit()
+void ExpFit::PrintInputData()
 {
   const size_t max_print = 10;
-  // original
-  cout << "original:";
+  cout << "\ninput data:";
   for (size_t i = 0; i < min(max_print, y.size()); ++i)
     cout << "\n\t" << y.at(i);
-  // clang-format off
-  cout << "\nparameters:"
-       << "\n\ta: " << a
-       << "\n\tb: " << b
-       << "\n\tc: " << c
-       << "\n\ty = " << a << " * e^" << b
-       << "x + " << c << endl;
-  // clang-format on
-  // fitted
-  cout << "\nfitted:";
-  for (size_t i = 0; i < min(max_print, y_fit.size()); ++i)
-    cout << "\n\t" << y_fit.at(i);
+  cout << endl;
+}
+
+void ExpFit::PrintFitParameter()
+{
   // clang-format off
   cout << "\nThe exponential fit is:"
-       << "\n\ta: " << copysignf(expf(lna_calc), a_approx)
-       << "\n\tb: " << b_calc
-       << "\n\tc: " << c_calc
        << "\n\ty = " << copysignf(expf(lna_calc), a_approx) << " * e^" << b_calc
-       << "x + " << c_calc << endl;
+       << "x + " << c_calc << endl << endl;
+  // clang-format on
+}
+
+void ExpFit::PrintFitData()
+{
+  const size_t max_print = 10;
+  cout << "\nfitted data:";
+  for (size_t i = 0; i < min(max_print, y_fit.size()); ++i)
+    cout << "\n\t" << y_fit.at(i);
+  cout << endl;
+}
+
+void ExpFit::PrintFitError(double c_tmp, double deltaC, double error,
+                           double min_error, int step)
+{
+  // clang-format off
+  cout << "\n=== c_tmp = " << c_tmp
+       << "\t    error = " << error
+       << "\t   deltaC = " << deltaC
+       << "\n   c_prev = " << c_approx
+       << "\tmin_error = " << min_error
+       << "\t     step = " << step
+       << endl;
   // clang-format on
 }

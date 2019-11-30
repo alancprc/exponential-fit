@@ -1,6 +1,6 @@
-#pragma  once
-#include <vector>
+#pragma once
 #include <tuple>
+#include <vector>
 
 class ExpFit
 {
@@ -26,7 +26,11 @@ class ExpFit
   double CalcFitError(double c_approx);
 
   bool AbortCalc(double c_approx);
-  void PrintFit();
+  void PrintFitParameter();
+  void PrintFitData();
+  void PrintFitError(double c_tmp, double deltaC, double error,
+                     double min_error, int step);
+  void PrintInputData();
 
   int n;
   double a;
@@ -38,6 +42,7 @@ class ExpFit
   double b_calc;
   double c_calc;
   double a_approx;
+  double c_approx;
   std::vector<double> y;
   std::vector<double> x;
   std::vector<double> dx;
