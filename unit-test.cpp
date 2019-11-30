@@ -88,3 +88,14 @@ TEST(ExpFitTest, SimCapIdealTest)
   EXPECT_NEAR(expfit.GetB(), -1.0/220, 1e-6);
   EXPECT_NEAR(expfit.GetC(), 0, 1e-6);
 }
+
+TEST(ExpFitTest, NonConsequentXTest)
+{
+  ExpFit expfit;
+  expfit.SetY({0.2388, 1.2529, 5.8686, 6.0383, 6.1825});
+  expfit.SetX({-5, -4, 6, 7, 8});
+  expfit.CalcFit();
+  EXPECT_NEAR(expfit.GetA(), -3, 1e-3);
+  EXPECT_NEAR(expfit.GetB(), -0.16, 3e-3);
+  EXPECT_NEAR(expfit.GetC(), 7, 1e-4);
+}
