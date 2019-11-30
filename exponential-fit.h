@@ -15,6 +15,7 @@ class ExpFit
   double GetA();
   double GetB();
   double GetC();
+  void Debug();
 
  private:
   void GenTestData(double n, double a, double b, double c);
@@ -40,6 +41,7 @@ class ExpFit
   double c_calc;
   double a_approx;
   double c_approx;
+  bool debug = false;
   std::vector<double> y;
   std::vector<double> x;
   std::vector<double> dx;

@@ -29,6 +29,8 @@ void ExpFit::GenTestData(double n, double a, double b, double c)
 
 void ExpFit::PrintTestData(double n, double a, double b, double c)
 {
+  if (not debug) return;
+
   cout << "test y:\n\t";
   for (const auto& e : y) {
     cout << left << setw(10) << e;
@@ -106,6 +108,8 @@ double ExpFit::GetB() { return b_calc; }
 
 double ExpFit::GetC() { return c_calc; }
 
+void ExpFit::Debug() { debug = true; }
+
 double ExpFit::CalcApproxC()
 {
   dx.resize(n - 1, 1);
@@ -124,14 +128,12 @@ double ExpFit::CalcApproxC()
     b_c[i] = log(dq[i + 1] / dq[i]) / (cx[i + 1] - cx[i]);
   }
   double b_approx = std::accumulate(b_c.begin(), b_c.end(), 0.0) / b_c.size();
-  cout << "b_approx: " << b_approx << endl;
 
   vector<double> a_c(n - 1);  // a calculated
   for (int i = 0; i != n - 1; ++i) {
     a_c[i] = dy[i] / (expf(b_approx * x[i + 1]) - expf(b_approx * x[i]));
   }
   a_approx = std::accumulate(a_c.begin(), a_c.end(), 0.0) / a_c.size();
-  cout << "a_approx: " << a_approx << endl;
 
   vector<double> c_c(n);  // c calculated
   for (int i = 0; i != n; ++i) {
@@ -142,7 +144,12 @@ double ExpFit::CalcApproxC()
   auto nth = c_c.begin() + c_c.size() / 2;
   std::nth_element(c_c.begin(), nth, c_c.end());
   double c_approx = *nth;
-  cout << "c_approx: " << c_approx << endl;
+
+  if (debug) {
+    cout << "a_approx: " << a_approx << endl;
+    cout << "b_approx: " << b_approx << endl;
+    cout << "c_approx: " << c_approx << endl;
+  }
   return c_approx;
 }
 
@@ -200,7 +207,7 @@ bool ExpFit::AbortCalc(double c_approx)
   auto static min = min_element(y.begin(), y.end());
   auto static max = max_element(y.begin(), y.end());
   bool abort = (c_approx >= *min) and (c_approx <= *max);
-  if (abort) {
+  if (debug and abort) {
     cout << "\n========== c : " << c_approx << "\t min: " << *min
          << "\t max: " << *max << "\t abort ==========" << endl;
   }
@@ -209,6 +216,8 @@ bool ExpFit::AbortCalc(double c_approx)
 
 void ExpFit::PrintInputData()
 {
+  if (not debug) return;
+
   const size_t max_print = 10;
   cout << "\ninput data:";
   for (size_t i = 0; i < min(max_print, y.size()); ++i)
@@ -218,6 +227,8 @@ void ExpFit::PrintInputData()
 
 void ExpFit::PrintFitParameter()
 {
+  if (not debug) return;
+
   // clang-format off
   cout << "\nThe exponential fit is:"
        << "\n\ty = " << copysignf(expf(lna_calc), a_approx) << " * e^" << b_calc
@@ -227,6 +238,8 @@ void ExpFit::PrintFitParameter()
 
 void ExpFit::PrintFitData()
 {
+  if (not debug) return;
+
   const size_t max_print = 10;
   cout << "\nfitted data:";
   for (size_t i = 0; i < min(max_print, y_fit.size()); ++i)
@@ -237,6 +250,8 @@ void ExpFit::PrintFitData()
 void ExpFit::PrintFitError(double c_tmp, double deltaC, double error,
                            double min_error, int step)
 {
+  if (not debug) return;
+
   // clang-format off
   cout << "\n=== c_tmp = " << c_tmp
        << "\t    error = " << error
