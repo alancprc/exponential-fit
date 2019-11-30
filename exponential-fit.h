@@ -10,7 +10,6 @@ class ExpFit
   void SetY(std::vector<double> y);
   void SetX(std::vector<double> x);
   void SetX();
-  /// calc the initial approximate of c
   void CalcFit();
   ResultType GetResult();
   double GetA();
@@ -18,8 +17,8 @@ class ExpFit
   double GetC();
 
  private:
-  void GenTestData();
-  void PrintTestData();
+  void GenTestData(double n, double a, double b, double c);
+  void PrintTestData(double n, double a, double b, double c);
 
   double CalcApproxC();
   double CalcInitDeltaC();
@@ -34,9 +33,6 @@ class ExpFit
   void PrintInputData();
 
   int n;
-  double a;
-  double b;
-  double c;
   double a_tmp;
   double b_tmp;
   double lna_calc;

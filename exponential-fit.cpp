@@ -10,15 +10,12 @@ using namespace std;
 void ExpFit::SetTest(int n, double a, double b, double c)
 {
   this->n = n;
-  this->a = a;
-  this->b = b;
-  this->c = c;
-  GenTestData();
-  PrintTestData();
+  GenTestData(n, a, b, c);
+  PrintTestData(n, a, b, c);
   CalcFit();
 }
 
-void ExpFit::GenTestData()
+void ExpFit::GenTestData(double n, double a, double b, double c)
 {
   x.resize(n);
   iota(x.begin(), x.end(), 0);
@@ -30,7 +27,7 @@ void ExpFit::GenTestData()
   }
 }
 
-void ExpFit::PrintTestData()
+void ExpFit::PrintTestData(double n, double a, double b, double c)
 {
   cout << "test y:\n\t";
   for (const auto& e : y) {
