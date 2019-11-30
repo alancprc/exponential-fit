@@ -99,3 +99,15 @@ TEST(ExpFitTest, NonConsequentXTest)
   EXPECT_NEAR(expfit.GetB(), -0.16, 3e-3);
   EXPECT_NEAR(expfit.GetC(), 7, 1e-4);
 }
+
+TEST(ExpFitTest, RealXTest)
+{
+  ExpFit expfit;
+  expfit.SetY(
+      {10000, 8000, 6000, 5000, 4000, 3000, 2000, 1000, 750, 500, 250, 100});
+  expfit.SetX({36, 39, 45, 48, 53, 61, 73, 97, 108, 121, 140, 152});
+  expfit.CalcFit();
+  EXPECT_NEAR(expfit.GetA(), 31000, 1e4);
+  EXPECT_NEAR(expfit.GetB(), -1.0/28, 0.02);
+  EXPECT_NEAR(expfit.GetC(), 100, 1e2);
+}
