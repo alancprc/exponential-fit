@@ -64,12 +64,17 @@ void ExpFit::SetX()
   for (const auto& e : this->x) cout << e << "\t";
 }
 
+double ExpFit::CalcInitDeltaC()
+{
+  return a_approx > 0 ? *(std::min_element(y.begin(), y.end())) - c_approx
+                      : *(std::max_element(y.begin(), y.end())) - c_approx;
+}
+
 void ExpFit::CalcFit()
 {
   c_approx = CalcApproxC();
-  double deltaC = a_approx > 0
-                      ? *(std::min_element(y.begin(), y.end())) - c_approx
-                      : *(std::max_element(y.begin(), y.end())) - c_approx;
+  double deltaC = CalcInitDeltaC();
+
   double min_error = CalcFitError(c_approx);
   int step = 0;
   PrintFitError(c_approx, deltaC, min_error, min_error, step);

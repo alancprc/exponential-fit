@@ -22,6 +22,7 @@ class ExpFit
   void PrintTestData();
 
   double CalcApproxC();
+  double CalcInitDeltaC();
   void CalcFitAB(double c_approx);
   double CalcFitError(double c_approx);
 
