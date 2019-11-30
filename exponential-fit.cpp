@@ -221,7 +221,7 @@ void ExpFit::PrintInputData()
   const size_t max_print = 10;
   cout << "\ninput data:";
   for (size_t i = 0; i < min(max_print, y.size()); ++i)
-    cout << "\n\t" << y.at(i);
+    cout << "\n\t" << x.at(i) << "\t" << y.at(i);
   cout << endl;
 }
 
@@ -243,7 +243,7 @@ void ExpFit::PrintFitData()
   const size_t max_print = 10;
   cout << "\nfitted data:";
   for (size_t i = 0; i < min(max_print, y_fit.size()); ++i)
-    cout << "\n\t" << y_fit.at(i);
+    cout << "\n\t" << x.at(i) << "\t" << y.at(i) << "\t" << y_fit.at(i);
   cout << endl;
 }
 
