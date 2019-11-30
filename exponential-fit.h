@@ -16,6 +16,8 @@ class ExpFit
   double GetB();
   double GetC();
   void Debug();
+  void PrintFitParameter();
+  void PrintFitData();
 
  private:
   void GenTestData(double n, double a, double b, double c);
@@ -27,8 +29,6 @@ class ExpFit
   double CalcFitError(double c_approx);
 
   bool AbortCalc(double c_approx);
-  void PrintFitParameter();
-  void PrintFitData();
   void PrintFitError(double c_tmp, double deltaC, double error,
                      double min_error, int step);
   void PrintInputData();
