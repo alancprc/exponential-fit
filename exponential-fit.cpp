@@ -85,7 +85,7 @@ void ExpFit::CalcFit()
     if (error < min_error) {
       PrintFitError(c_tmp, deltaC, error, min_error, step);
       min_error = error;
-      c_approx += deltaC;
+      c_approx = c_tmp;
     } else {
       deltaC /= -2;
     }
