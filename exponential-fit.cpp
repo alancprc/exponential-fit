@@ -53,12 +53,8 @@ void ExpFit::SetX(vector<double> x) { this->x = x; }
 
 void ExpFit::SetX()
 {
-  cout << y.size() << endl;
   x.resize(y.size());
-  cout << x.size() << endl;
-  for (const auto& e : this->x) cout << e << "\t";
   iota(x.begin(), x.end(), 0);
-  for (const auto& e : this->x) cout << e << "\t";
 }
 
 double ExpFit::CalcInitDeltaC()
