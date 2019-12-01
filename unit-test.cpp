@@ -100,7 +100,7 @@ TEST(ExpFitTest, NonConsequentXTest)
   EXPECT_NEAR(expfit.GetC(), 7, 2e-4);
 }
 
-TEST(ExpFitTest, RealXTest)
+TEST(ExpFitTest, NonIdealDataTest)
 {
   ExpFit expfit;
   expfit.SetY(
