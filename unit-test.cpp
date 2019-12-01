@@ -41,9 +41,9 @@ TEST(ExpFitTest, PositiveMorePointsTest)
 {
   ExpFit expfit;
   expfit.SetTest(50, 1, 1, 0);
-  EXPECT_NEAR(expfit.GetA(), 1, 1e-6);
+  EXPECT_NEAR(expfit.GetA(), 1, 4e-6);
   EXPECT_NEAR(expfit.GetB(), 1, 1e-6);
-  EXPECT_NEAR(expfit.GetC(), 0, 1e-6);
+  EXPECT_NEAR(expfit.GetC(), 0, 4e-5);
 }
 
 TEST(ExpFitTest, NegativeMorePointsTest)
@@ -97,7 +97,7 @@ TEST(ExpFitTest, NonConsequentXTest)
   expfit.CalcFit();
   EXPECT_NEAR(expfit.GetA(), -3, 1e-3);
   EXPECT_NEAR(expfit.GetB(), -0.16, 3e-3);
-  EXPECT_NEAR(expfit.GetC(), 7, 1e-4);
+  EXPECT_NEAR(expfit.GetC(), 7, 2e-4);
 }
 
 TEST(ExpFitTest, RealXTest)
