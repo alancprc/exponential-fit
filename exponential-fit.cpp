@@ -182,24 +182,14 @@ void ExpFit::CalcFitAB(double c_approx)
 
 double ExpFit::CalcFitError(double c_approx)
 {
-  vector<double> ee(n - 1);
-  for (int i = 0; i != n - 1; ++i) {
-    ee[i] = log((y[i + 1] - c_approx) / (y[i] - c_approx));
+  CalcFitAB(c_approx);
+  double error = 0;
+  for(size_t i = 0; i != y.size(); ++i) {
+    error += std::abs(y.at(i) - y_fit.at(i));
   }
+  if (debug) cout << "error : " << error << endl;
 
-  vector<double> growthFactor(n - 1);
-  for (size_t i = 0; i != growthFactor.size(); ++i) {
-    growthFactor[i] = expf(ee[i] / dx[i]);
-  }
-
-  double ee_sum = std::accumulate(ee.begin(), ee.end(), 0.0);
-  double avgGrowthFactor = expf(ee_sum / (x.back() - x.front()));
-
-  double deviation = 0;
-  for (size_t i = 0; i != growthFactor.size(); ++i) {
-    deviation += std::abs(avgGrowthFactor - growthFactor[i]);
-  }
-  return deviation;
+  return error;
 }
 
 bool ExpFit::AbortCalc(double c_approx)
