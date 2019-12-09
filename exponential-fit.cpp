@@ -45,13 +45,19 @@ void ExpFit::PrintTestData(double n, double a, double b, double c)
   // clang-format on
 }
 
-void ExpFit::SetY(vector<double> y)
+void ExpFit::SetY(const vector<double>& y)
 {
   this->y = y;
   n = y.size();
 }
 
-void ExpFit::SetX(vector<double> x) { this->x = x; }
+void ExpFit::SetY(const double* begin, const double* end)
+{
+  y.assign(begin, end);
+  n = y.size();
+}
+
+void ExpFit::SetX(const vector<double>& x) { this->x = x; }
 
 void ExpFit::SetX()
 {

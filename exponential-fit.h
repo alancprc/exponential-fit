@@ -7,8 +7,9 @@ class ExpFit
  public:
   using ResultType = std::tuple<double, double, double>;
   void SetTest(int n, double a, double b, double c);
-  void SetY(std::vector<double> y);
-  void SetX(std::vector<double> x);
+  void SetY(const std::vector<double>& y);
+  void SetY(const double* begin, const double* end);
+  void SetX(const std::vector<double>& x);
   void SetX();
   void CalcFit();
   ResultType GetResult();
