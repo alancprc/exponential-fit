@@ -73,15 +73,16 @@ double ExpFit::CalcInitDeltaC()
 
 void ExpFit::CalcFit()
 {
-  c_approx = CalcApproxC();
+  CalcApproxC();
   double deltaC = CalcInitDeltaC();
 
   double min_error = CalcFitError(c_approx);
   int step = 0;
   PrintFitError(c_approx, deltaC, min_error, min_error, step);
 
+  c_calc = c_approx;
   for (; std::abs(deltaC) > 10e-8; ++step) {
-    double c_tmp = c_approx + deltaC;
+    double c_tmp = c_calc + deltaC;
     if (AbortCalc(c_tmp)) {
       deltaC /= 2;
       continue;
@@ -91,12 +92,11 @@ void ExpFit::CalcFit()
     if (error < min_error) {
       PrintFitError(c_tmp, deltaC, error, min_error, step);
       min_error = error;
-      c_approx = c_tmp;
+      c_calc = c_tmp;
     } else {
       deltaC /= -2;
     }
   }
-  c_calc = c_approx;
   CalcFitAB(c_calc);
   PrintInputData();
   PrintFitData();
@@ -151,7 +151,7 @@ double ExpFit::CalcApproxC()
   // the median value is better than mean value.
   auto nth = c_c.begin() + c_c.size() / 2;
   std::nth_element(c_c.begin(), nth, c_c.end());
-  double c_approx = *nth;
+  c_approx = *nth;
 
   if (debug) {
     cout << "a_approx: " << a_approx << endl;
