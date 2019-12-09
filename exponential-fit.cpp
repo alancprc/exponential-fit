@@ -114,7 +114,9 @@ double ExpFit::GetB() { return b_calc; }
 
 double ExpFit::GetC() { return c_calc; }
 
-void ExpFit::Debug() { debug = true; }
+void ExpFit::DebugOn() { debug = true; }
+
+void ExpFit::DebugOff() { debug = false; }
 
 double ExpFit::CalcApproxC()
 {

@@ -16,7 +16,8 @@ class ExpFit
   double GetA();
   double GetB();
   double GetC();
-  void Debug();
+  void DebugOn();
+  void DebugOff();
   void PrintFitParameter();
   void PrintFitData();
 
