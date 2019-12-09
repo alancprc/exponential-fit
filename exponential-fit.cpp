@@ -105,10 +105,10 @@ void ExpFit::CalcFit()
 
 ExpFit::ResultType ExpFit::GetResult()
 {
-  return make_tuple(copysign(expf(lna_calc), a_approx), b_calc, c_calc);
+  return make_tuple(a_calc, b_calc, c_calc);
 }
 
-double ExpFit::GetA() { return copysignf(expf(lna_calc), a_approx); }
+double ExpFit::GetA() { return a_calc; }
 
 double ExpFit::GetB() { return b_calc; }
 
@@ -179,13 +179,14 @@ void ExpFit::CalcFitAB(double c_approx)
   // calculate slope(or the the power of exp)
   b_calc = (n * xysum - xsum * ysum) / (n * x2sum - xsum * xsum);
   // calculate intercept
-  lna_calc = (x2sum * ysum - xsum * xysum) / (x2sum * n - xsum * xsum);
+  double lna_calc = (x2sum * ysum - xsum * xysum) / (x2sum * n - xsum * xsum);
+  a_calc = copysignf(expf(lna_calc), a_approx);
 
   // to calculate y(fitted) at given x points
   y_fit.resize(n);
   for (int i = 0; i < n; i++)
     y_fit[i] =
-        copysignf(expf(lna_calc), a_approx) * expf(b_calc * x[i]) + c_approx;
+        a_calc * expf(b_calc * x[i]) + c_approx;
 }
 
 double ExpFit::CalcFitError(double c_approx)
@@ -228,7 +229,7 @@ void ExpFit::PrintFitParameter()
 
   // clang-format off
   cout << "\nThe exponential fit is:"
-       << "\n\ty = " << copysignf(expf(lna_calc), a_approx) << " * e^" << b_calc
+       << "\n\ty = " << a_calc << " * e^" << b_calc
        << "x + " << c_calc << endl << endl;
   // clang-format on
 }

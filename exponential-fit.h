@@ -36,7 +36,7 @@ class ExpFit
   void PrintInputData();
 
   int n;
-  double lna_calc;
+  double a_calc;
   double b_calc;
   double c_calc;
   double a_approx;
