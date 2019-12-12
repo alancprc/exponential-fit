@@ -44,9 +44,5 @@ class ExpFit
   bool debug = false;
   std::vector<double> y;
   std::vector<double> x;
-  std::vector<double> dx;
-  std::vector<double> dy;
-  std::vector<double> cx;
-  std::vector<double> dq;
   std::vector<double> y_fit;
 };

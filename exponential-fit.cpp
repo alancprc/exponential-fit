@@ -120,12 +120,13 @@ void ExpFit::DebugOff() { debug = false; }
 
 double ExpFit::CalcApproxC()
 {
-  dx.resize(n - 1, 1);
-  dy.resize(n - 1);
-  cx.resize(n - 1);
-  dq.resize(n - 1);
+  vector<double> dx(n - 1, 1);
+  vector<double> dy(n - 1);
+  vector<double> cx(n - 1);
+  vector<double> dq(n - 1);
 
   for (int i = 0; i != n - 1; ++i) {
+    dx[i] = x[i + 1] - x[i];
     dy[i] = y[i + 1] - y[i];
     cx[i] = (x[i + 1] + x[i]) / 2;
     dq[i] = dy[i] / dx[i];
