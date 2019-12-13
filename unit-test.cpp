@@ -108,3 +108,14 @@ TEST(ExpFitTest, NonIdealDataTest)
   EXPECT_NEAR(expfit.GetB(), -1.0 / 28, 0.02);
   EXPECT_NEAR(expfit.GetC(), 100, 1e2);
 }
+
+TEST(ExpFitTest, TimeMeasureTest)
+{
+  for (int i = 0; i != 1000; ++i) {
+    ExpFit expfit;
+    expfit.SetTest(220, 0.5, -1.0 / 220, 0.0);
+    EXPECT_NEAR(expfit.GetA(), 0.5, 1e-6);
+    EXPECT_NEAR(expfit.GetB(), -1.0 / 220, 1e-6);
+    EXPECT_NEAR(expfit.GetC(), 0, 1e-6);
+  }
+}
