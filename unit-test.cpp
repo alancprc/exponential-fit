@@ -80,12 +80,9 @@ TEST(ExpFitTest, NoiseTest)
 TEST(ExpFitTest, SimCapIdealTest)
 {
   ExpFit expfit;
-  expfit.SetTest(220, 0.5, -1.0/220, 0.0);
-  // expfit.SetY({1, expf(-1) + 0.004, expf(-2) - 0.003, expf(-3)});
-  // expfit.SetX();
-  // expfit.CalcFit();
+  expfit.SetTest(220, 0.5, -1.0 / 220, 0.0);
   EXPECT_NEAR(expfit.GetA(), 0.5, 1e-6);
-  EXPECT_NEAR(expfit.GetB(), -1.0/220, 1e-6);
+  EXPECT_NEAR(expfit.GetB(), -1.0 / 220, 1e-6);
   EXPECT_NEAR(expfit.GetC(), 0, 1e-6);
 }
 
@@ -108,6 +105,6 @@ TEST(ExpFitTest, NonIdealDataTest)
   expfit.SetX({36, 39, 45, 48, 53, 61, 73, 97, 108, 121, 140, 152});
   expfit.CalcFit();
   EXPECT_NEAR(expfit.GetA(), 31000, 1e4);
-  EXPECT_NEAR(expfit.GetB(), -1.0/28, 0.02);
+  EXPECT_NEAR(expfit.GetB(), -1.0 / 28, 0.02);
   EXPECT_NEAR(expfit.GetC(), 100, 1e2);
 }
