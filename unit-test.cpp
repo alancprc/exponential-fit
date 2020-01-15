@@ -1,5 +1,10 @@
 #include <gtest/gtest.h>
 #include "exponential-fit.h"
+#include <algorithm>
+#include <vector>
+#include <random>
+
+using namespace std;
 
 TEST(ExpFitTest, PositiveTest)
 {
@@ -118,4 +123,26 @@ TEST(ExpFitTest, TimeMeasureTest)
     EXPECT_NEAR(expfit.GetB(), -1.0 / 220, 1e-6);
     EXPECT_NEAR(expfit.GetC(), 0, 1e-6);
   }
+}
+
+TEST(ExpFitTest, SimCapWithNoiseTest)
+{
+  std::random_device r;
+  std::mt19937 e(r());
+  std::normal_distribution<> dis(0.0, 1e-3);
+
+  const int size = 220;
+  vector<double> voltage(size);
+  for (auto it = voltage.begin(); it != voltage.end(); ++it) {
+    *it = 0.5 * expf(distance(voltage.begin(), it) * -1.0 / size) + dis(e);
+  }
+
+  ExpFit expfit;
+  expfit.SetY(voltage);
+  expfit.SetX();
+  expfit.DebugOn();
+  expfit.CalcFit();
+  EXPECT_NEAR(expfit.GetA(), 0.5, 1e-6);
+  EXPECT_NEAR(expfit.GetB(), -1.0 / size, 1e-6);
+  EXPECT_NEAR(expfit.GetC(), 0, 1e-6);
 }
